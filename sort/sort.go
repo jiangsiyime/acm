@@ -1,5 +1,11 @@
 package sort
 
+import (
+    "context"
+    "sync"
+    "time"
+)
+
 // QuickSort quick sort function
 //  - nums: the numbers will be sorted
 //  - left: left index of the slice
@@ -48,5 +54,35 @@ func Merge(left []int, right []int) (result []int) {
 	}
 	result = append(result, left[i:]...)
 	result = append(result, right[j:]...)
+	return
+}
+
+// SleepSortNew sleep sort
+//  - nums: the numbers will be sorted
+func SleepSortNew(nums []int) (result []int) {
+	wg := &sync.WaitGroup{}
+	ctx, cancel := context.WithCancel(context.Background())
+	channel := make(chan int)
+	wg.Add(len(nums))
+	for _, v := range nums {
+		go func(v int) {
+			time.Sleep(time.Duration(v) * time.Millisecond)
+			channel <- v
+			wg.Done()
+		}(v)
+	}
+	go func() {
+		for {
+			select {
+			case v, _ := <-channel:
+				result = append(result, v)
+			case <-ctx.Done():
+				break
+			}
+		}
+	}()
+	wg.Wait()
+	time.Sleep(time.Millisecond)
+	cancel()
 	return
 }
