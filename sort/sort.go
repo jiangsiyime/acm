@@ -86,3 +86,19 @@ func SleepSortNew(nums []int) (result []int) {
 	cancel()
 	return
 }
+
+// ChangeSort sort an array or a slice
+//  - nums: the numbers will be sorted
+func ChangeSort(nums []int) []int {
+	if len(nums) <= 1 {
+		return nums
+	}
+	for i := 0; i < len(nums); i++ {
+		for j := i; j < len(nums); j++ {
+			if nums[i] < nums[j] {
+				nums[i], nums[j] = nums[j], nums[i]
+			}
+		}
+	}
+	return nums
+}
