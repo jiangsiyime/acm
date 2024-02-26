@@ -102,3 +102,42 @@ func ChangeSort(nums []int) []int {
 	}
 	return nums
 }
+
+// exchange number in array
+func swap(arr []int, i, j int) {
+	arr[i], arr[j] = arr[j], arr[i]
+}
+
+// adjust the heap
+func heapify(arr []int, n, i int) {
+	largest := i
+	left := 2*i + 1
+	right := 2*i + 2
+
+	if left < n && arr[left] > arr[largest] {
+		largest = left
+	}
+
+	if right < n && arr[right] > arr[largest] {
+		largest = right
+	}
+
+	if largest != i {
+		swap(arr, i, largest)
+		heapify(arr, n, largest)
+	}
+}
+
+// HeapSort heap sort the numbers
+//  - arr: the numbers will be sorted
+func HeapSort(arr []int) {
+	 n := len(arr)
+
+	for i := n/2 - 1; i >= 0; i-- {
+		heapify(arr, n, i)
+	}
+	for i := n - 1; i >= 0; i-- {
+		swap(arr, 0, i)
+		heapify(arr, i, 0)
+	}
+}
